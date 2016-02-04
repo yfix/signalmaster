@@ -1,1 +1,1 @@
-FROM google/nodejs-runtime
+FROM node
