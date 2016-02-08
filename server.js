@@ -20,6 +20,25 @@ if (config.server.secure) {
 } else {
     server = require('http').Server(server_handler);
 }
+
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+    host: config.mysql.host,
+    port: config.mysql.port,
+    user: config.mysql.user,
+    password: config.mysql.password,
+    database:  config.mysql.database
+});
+/*
+    sample query
+
+var query = connection.query('SELECT * FROM v_rooms WHERE `id`=2', function(err, result) {
+  console.log(err);
+  console.log(result);
+});
+*/
+
 server.listen(port);
 
 sockets(server, config);
