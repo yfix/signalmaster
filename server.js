@@ -1,7 +1,7 @@
 /*global console*/
 var config = require('getconfig'),
     fs = require('fs'),
-    sockets = require('./sockets'),
+    sockets = require('./src/sockets'),
     port = parseInt(process.env.PORT || config.server.port, 10),
     server_handler = function (req, res) {
         res.writeHead(404);
