@@ -52,15 +52,14 @@ module.exports = function (server, config) {
             }
         }
 
-        function join(name, cb) {
+        function join(auth, cb) {
             // sanity check
-            if (typeof name !== 'string') return;
-            // check if maximum number of clients reached
-            if (config.rooms && config.rooms.maxClients > 0 &&
-                clientsInRoom(name) >= config.rooms.maxClients) {
-                safeCb(cb)('full');
-                return;
-            }
+            if (typeof auth !== 'string') return;
+            var arr = auth.split("_");
+            var name = arr[1];
+            var user_id = parseInt(arr[0]);
+            
+            console.log("Incoming user: " + user_id + ", room " + name);
             // leave any existing rooms
             removeFeed();
             safeCb(cb)(null, describeRoom(name));
