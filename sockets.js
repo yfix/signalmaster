@@ -60,6 +60,12 @@ module.exports = function (server, config) {
             var user_id = parseInt(arr[0]);
             
             console.log("Incoming user: " + user_id + ", room " + name);
+            
+            if (user_id >= 50) { // to replace for real check )
+                safeCb(cb)('deny');
+                return;
+            }
+
             // leave any existing rooms
             removeFeed();
             safeCb(cb)(null, describeRoom(name));
@@ -74,24 +80,6 @@ module.exports = function (server, config) {
         });
         client.on('leave', function () {
             removeFeed();
-        });
-
-        client.on('create', function (name, cb) {
-            if (arguments.length == 2) {
-                cb = (typeof cb == 'function') ? cb : function () {};
-                name = name || uuid();
-            } else {
-                cb = name;
-                name = uuid();
-            }
-            // check if exists
-            var room = io.nsps['/'].adapter.rooms[name];
-            if (room && room.length) {
-                safeCb(cb)('taken');
-            } else {
-                join(name);
-                safeCb(cb)(null, name);
-            }
         });
 
         // support for logging full webrtc traces to stdout
