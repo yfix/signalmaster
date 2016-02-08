@@ -142,7 +142,8 @@ module.exports = function (server, config) {
     }
 
     function clientsInRoom(name) {
-        return io.sockets.clients(name).length;
+        if (io.nsps['/'].adapter.rooms[name] == undefined) return 0;
+        return io.nsps['/'].adapter.rooms[name].length;
     }
 
 };
