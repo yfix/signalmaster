@@ -28,15 +28,6 @@ module.exports = function (server, config) {
             otherClient.emit('message', details);
         });
 
-        client.on('shareScreen', function () {
-            client.resources.screen = true;
-        });
-
-        client.on('unshareScreen', function (type) {
-            client.resources.screen = false;
-            removeFeed('screen');
-        });
-
         client.on('join', join);
 
         function removeFeed(type) {
@@ -61,7 +52,7 @@ module.exports = function (server, config) {
             
             console.log("Incoming user: " + user_id + ", room " + name);
             
-            if (user_id >= 50) { // to replace for real check )
+            if (false) { // to replace for real check )
                 safeCb(cb)('deny');
                 return;
             }
@@ -70,6 +61,7 @@ module.exports = function (server, config) {
             removeFeed();
             safeCb(cb)(null, describeRoom(name));
             client.join(name);
+            client.user_id = user_id;
             client.room = name;
         }
 
