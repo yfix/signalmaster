@@ -1,8 +1,13 @@
 signalmaster:
-#  image: yfix/signalmaster
-  build: .
+  image: yfix/signalmaster
+#  build: .
   restart: always
   ports:
     - "127.0.0.1:8888:8888"
+  environment:
+    - NODE_ENV=production
   volumes:
-    - .:/app
+    - ./server.js:/app/server.js
+    - ./src:/app/src
+    - ./scripts:/app/scripts
+    - ./config:/app/config

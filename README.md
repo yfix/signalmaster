@@ -49,12 +49,8 @@ $ NODE_ENV=production node server.js
 
 ## Docker
 
-You can build this image by calling:  
-
-    docker build -t signalmaster https://github.com/andyet/signalmaster.git
-
 To run the image execute this:  
 
-    docker run --name signalmaster -d -p 8888:8888 signalmaster
+    docker-compose up -d && docker-compose logs
 
 This will start a signal master server on port 8888 exposed on port 8888.
