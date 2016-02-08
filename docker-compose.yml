@@ -1,0 +1,8 @@
+signalmaster:
+#  image: yfix/signalmaster
+  build: .
+  restart: always
+  ports:
+    - "127.0.0.1:8888:8888"
+  volumes:
+    - .:/app
