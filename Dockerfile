@@ -91,7 +91,7 @@ RUN cd $APP_PATH \
 	&& env | sort \
 	&& rm -vfr ./node_modules/ \
 	&& mkdir -p $NODE_PATH \
-	&& npm install -g
+	&& npm update
 
 COPY . $APP_PATH
 
