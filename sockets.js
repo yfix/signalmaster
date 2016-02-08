@@ -142,8 +142,9 @@ module.exports = function (server, config) {
     }
 
     function clientsInRoom(name) {
-        if (io.nsps['/'].adapter.rooms[name] == undefined) return 0;
-        return io.nsps['/'].adapter.rooms[name].length;
+        var adapter = io.nsps['/'].adapter;
+        var clients = adapter.rooms[name] || {};
+        return Object.keys(clients).length;
     }
 
 };
