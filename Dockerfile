@@ -6,7 +6,7 @@ ENV NPM_CONFIG_LOGLEVEL info
 ENV NODE_VERSION 5.5.0
 ENV APP_VERSION 0.0.1
 ENV APP_PATH /app
-ENV NODE_PATH /usr/lib/node_modules
+ENV NODE_PATH /usr/local/lib/node_modules
 ENV USER=root
 ENV HOME=/tmp
 
@@ -76,19 +76,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	xz-utils \
 	zlib1g-dev \
 	python \
+	git \
+	subversion \
   && apt-get autoremove -y \
   && apt-get clean -y \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p $APP_PATH
 
-COPY . $APP_PATH
+# Specially moved out to ensure docker cache working fine
+COPY package.json $APP_PATH/package.json
 
 RUN cd $APP_PATH \
 	&& env | sort \
 	&& rm -vfr ./node_modules/ \
 	&& mkdir -p $NODE_PATH \
 	&& npm install -g
+
+COPY . $APP_PATH
 
 WORKDIR $APP_PATH
 
