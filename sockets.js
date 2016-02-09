@@ -116,6 +116,7 @@ module.exports = function (server, config) {
         };
         Object.keys(clients).forEach(function (id) {
             result.clients[id] = adapter.nsp.connected[id].resources;
+            result.clients[id].user_id = adapter.nsp.connected[id].user_id;
         });
         return result;
     }
