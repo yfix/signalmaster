@@ -21,27 +21,19 @@ if (config.server.secure) {
     server = require('http').Server(server_handler);
 }
 
-var mysql = require('mysql');
+var mysql_module = require('mysql');
 
-var connection = mysql.createConnection({
+var mysql = mysql_module.createConnection({
     host: config.mysql.host,
     port: config.mysql.port,
     user: config.mysql.user,
     password: config.mysql.password,
     database:  config.mysql.database
 });
-/*
-    sample query
-
-var query = connection.query('SELECT * FROM v_rooms WHERE `id`=2', function(err, result) {
-  console.log(err);
-  console.log(result);
-});
-*/
 
 server.listen(port);
 
-sockets(server, config);
+sockets(server, config, mysql);
 
 if (config.uid) process.setuid(config.uid);
 

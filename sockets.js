@@ -1,8 +1,9 @@
 var socketIO = require('socket.io'),
     uuid = require('node-uuid'),
     crypto = require('crypto');
+    async = require('async');
 
-module.exports = function (server, config) {
+module.exports = function (server, config, mysql) {
     var io = socketIO.listen(server);
 
     if (config.logLevel) {
@@ -52,17 +53,19 @@ module.exports = function (server, config) {
             
             console.log("Incoming user: " + user_id + ", room " + name);
             
-            if (false) { // to replace for real check )
-                safeCb(cb)('deny');
-                return;
-            }
-
-            // leave any existing rooms
-            removeFeed();
-            safeCb(cb)(null, describeRoom(name));
-            client.join(name);
-            client.user_id = user_id;
-            client.room = name;
+            mysql.query('SELECT ru.* FROM v_videochat_room_users AS ru LEFT JOIN v_videochat_rooms AS r ON r.name='+mysql.escape(name)+' AND r.id=ru.room_id WHERE ru.user_id='+user_id, function(err, result) {
+                if (err) throw err;
+                if(result.length === 0) {
+                    safeCb(cb)('deny');
+                } else {
+                    // leave any existing rooms
+                    removeFeed();
+                    safeCb(cb)(null, describeRoom(name));
+                    client.join(name);
+                    client.user_id = user_id;
+                    client.room = name;
+                }
+            });
         }
 
         // we don't want to pass "leave" directly because the
