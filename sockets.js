@@ -33,6 +33,8 @@ module.exports = function (server, config, mysql) {
 
         function removeFeed(type) {
             if (client.room) {
+                mysql.query('UPDATE v_videochat_room_users SET ws_connection_id=\'\' WHERE user_id='+ client.user_id +' AND room_id=' + client.room_id, function(err) { if (err) throw err; });
+                
                 io.sockets.in(client.room).emit('remove', {
                     id: client.id,
                     type: type
@@ -43,7 +45,7 @@ module.exports = function (server, config, mysql) {
                 }
             }
         }
-
+        
         function join(auth, cb) {
             // sanity check
             if (typeof auth !== 'string') return;
@@ -58,11 +60,14 @@ module.exports = function (server, config, mysql) {
                 if(result.length === 0) {
                     safeCb(cb)('deny');
                 } else {
+                    var room_id = parseInt(result[0].room_id);
                     // leave any existing rooms
+                    mysql.query('UPDATE v_videochat_room_users SET ws_connection_id=' + mysql.escape(client.id) + ' WHERE user_id='+ user_id +' AND room_id='+room_id, function(err) { if (err) throw err; });
                     removeFeed();
                     safeCb(cb)(null, describeRoom(name));
                     client.join(name);
                     client.user_id = user_id;
+                    client.room_id = room_id;
                     client.room = name;
                 }
             });
