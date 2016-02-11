@@ -119,17 +119,9 @@ module.exports = function (server, config, mysql) {
         };
         Object.keys(clients).forEach(function (id) {
             result.clients[id] = adapter.nsp.connected[id].resources;
-            result.clients[id].user_id = adapter.nsp.connected[id].user_id;
         });
         return result;
     }
-
-    function clientsInRoom(name) {
-        var adapter = io.nsps['/'].adapter;
-        var clients = adapter.rooms[name] || {};
-        return Object.keys(clients).length;
-    }
-
 };
 
 function safeCb(cb) {
