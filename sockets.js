@@ -58,10 +58,10 @@ module.exports = function (server, config, mysql) {
             mysql.query('SELECT ru.* FROM v_videochat_room_users AS ru LEFT JOIN v_videochat_rooms AS r ON r.name='+mysql.escape(name)+' AND r.id=ru.room_id WHERE ru.user_id='+user_id, function(err, result) {
                 if (err) throw err;
                 if(result.length === 0) {
-                    safeCb(cb)('deny');
+                    safeCb(cb)('join.deny');
                 } else {
                     if (result[0].ws_connection_id != '') {
-                        safeCb(cb)('already_online');
+                        safeCb(cb)('join.already_online');
                     } else {
                         var room_id = parseInt(result[0].room_id);
                         // leave any existing rooms
