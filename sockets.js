@@ -22,6 +22,10 @@ module.exports = function (server, config, mysql) {
         client.on('message', function (details) {
             if (!details) return;
 
+            if (details.type === 'disconnect') {
+                console.log('disconnect from ' + client.user_id);
+            }
+
             var otherClient = io.to(details.to);
             if (!otherClient) return;
 
