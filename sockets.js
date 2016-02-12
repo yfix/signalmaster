@@ -21,14 +21,10 @@ module.exports = function (server, config, mysql) {
         // pass a message to another id
         client.on('message', function (details) {
             if (!details) return;
-
-            if (details.type === 'disconnect') {
-                console.log('disconnect from ' + client.user_id);
-            }
-
+            
             var otherClient = io.to(details.to);
             if (!otherClient) return;
-
+            
             details.from = client.id;
             otherClient.emit('message', details);
         });
@@ -57,7 +53,7 @@ module.exports = function (server, config, mysql) {
             var name = arr[1];
             var user_id = parseInt(arr[0]);
             
-            console.log("Incoming user: " + user_id + ", room " + name);
+            console.log("Incoming user: " + user_id + ", connection id: " + client.id + ", room " + name);
             
             mysql.query('SELECT ru.* FROM v_videochat_room_users AS ru LEFT JOIN v_videochat_rooms AS r ON r.name='+mysql.escape(name)+' AND r.id=ru.room_id WHERE ru.user_id='+user_id, function(err, result) {
                 if (err) throw err;
