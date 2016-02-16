@@ -9,6 +9,9 @@
     "cert": "config/sslcerts/cert.pem",
     "password": null
   },
+  "auth": {
+      "secret": "234fdfjisdocw85u234895unxckvn"
+  },  
   "mysql": {
     "host": "127.0.0.1",
     "port": 3306,

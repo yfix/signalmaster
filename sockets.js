@@ -50,12 +50,20 @@ module.exports = function (server, config, mysql) {
             // sanity check
             if (typeof auth !== 'string') return;
             var arr = auth.split("_");
+            var hash = arr[2];
             var name = arr[1];
             var user_id = parseInt(arr[0]);
             
             console.log("Incoming user: " + user_id + ", connection id: " + client.id + ", room " + name);
             
-            mysql.query('SELECT ru.* FROM v_videochat_room_users AS ru LEFT JOIN v_videochat_rooms AS r ON r.name='+mysql.escape(name)+' AND r.id=ru.room_id WHERE ru.user_id='+user_id, function(err, result) {
+            var sql = 'SELECT ru.* FROM v_videochat_room_users AS ru \n\
+                        LEFT JOIN v_videochat_rooms AS r ON r.name='+mysql.escape(name)+' AND r.id=ru.room_id \n\
+                        LEFT JOIN v_user as u ON ru.user_id=u.id\n\
+                        WHERE ru.user_id='+user_id+' AND \n\
+                        MD5(CONCAT(u.id, u.password,'+mysql.escape(config.auth.secret)+'))='+mysql.escape(hash);
+
+            mysql.query(sql, function(err, result) {
+                
                 if (err) throw err;
                 if(result.length === 0) {
                     safeCb(cb)('join.deny');
