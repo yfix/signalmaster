@@ -9,6 +9,16 @@
     "cert": "config/sslcerts/cert.pem",
     "password": null
   },
+  "auth": {
+      "secret": "234fdfjisdocw85u234895unxckvn"
+  },  
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "root",
+    "password": "123456",
+    "database": "videochat_signal"
+  },  
   "rooms": {
     "/* maxClients */": "/* maximum number of clients per room. 0 = no limit */",
     "maxClients": 0

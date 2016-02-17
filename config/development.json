@@ -9,6 +9,16 @@
     "cert": null,
     "password": null
   },
+  "auth": {
+      "secret": "234fdfjisdocw85u234895unxckvn"
+  },
+  "mysql": {
+    "host": "192.168.1.5",
+    "port": 3306,
+    "user": "root",
+    "password": "123456",
+    "database": "videochat"
+  },
   "rooms": {
     "/* maxClients */": "/* maximum number of clients per room. 0 = no limit */",
     "maxClients": 0

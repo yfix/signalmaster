@@ -19,9 +19,23 @@ if (config.server.secure) {
 } else {
     server = require('http').Server(server_handler);
 }
+
+var mysql_module = require('mysql');
+
+var mysql = mysql_module.createConnection({
+    host: config.mysql.host,
+    port: config.mysql.port,
+    user: config.mysql.user,
+    password: config.mysql.password,
+    database:  config.mysql.database
+});
+
+// reset connections
+mysql.query('UPDATE v_videochat_room_users SET ws_connection_id=\'\'', function(err) { if (err) throw err; });
+
 server.listen(port);
 
-sockets(server, config);
+sockets(server, config, mysql);
 
 if (config.uid) process.setuid(config.uid);
 
