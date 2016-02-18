@@ -29,9 +29,8 @@ var mysql = mysql_module.createConnection({
     password: config.mysql.password,
     database:  config.mysql.database
 });
-
 // reset connections
-mysql.query('UPDATE v_videochat_room_users SET ws_connection_id=\'\'', function(err) { if (err) throw err; });
+// mysql.query('UPDATE v_videochat_room_users SET ws_connection_id=\'\'', function(err) { if (err) throw err; });
 
 server.listen(port);
 
