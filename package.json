@@ -10,7 +10,8 @@
     "engine.io-parser": "1.2.2",
     "getconfig": "2.2.0",
     "yetify": "0.0.1",
-    "mysql": "2.10.2"
+    "mysql": "2.10.2",
+    "lodash": "4.5.1"
   },
   "main": "server.js",
   "repository": {
