@@ -1,6 +1,7 @@
 var socketIO = require('socket.io'),
     crypto = require('crypto');
-
+    _ = require('lodash');
+    
 module.exports = function (server, config, mysql) {
     var io = socketIO.listen(server);
     var users = [];
@@ -31,7 +32,7 @@ module.exports = function (server, config, mysql) {
             socket: socket.id
           });
 
-          socket.emit('login_successful', _.pluck(users, 'name'));
+          socket.emit('login_successful', _.map(users, 'name'));
           socket.broadcast.emit('online', name);
 
           console.log(name + ' logged in');
