@@ -57,8 +57,8 @@ module.exports = function (server, config, mysql) {
             console.log("Incoming user: " + user_id + ", connection id: " + client.id + ", room " + name);
             
             var sql = 'SELECT ru.* FROM v_videochat_room_users AS ru \n\
-                        LEFT JOIN v_videochat_rooms AS r ON r.name='+mysql.escape(name)+' AND r.id=ru.room_id \n\
-                        LEFT JOIN v_user as u ON ru.user_id=u.id\n\
+                        INNER JOIN v_videochat_rooms AS r ON r.name='+mysql.escape(name)+' AND r.id=ru.room_id \n\
+                        INNER JOIN v_user as u ON ru.user_id=u.id\n\
                         WHERE ru.user_id='+user_id+' AND \n\
                         MD5(CONCAT(u.id, u.password,'+mysql.escape(config.auth.secret)+'))='+mysql.escape(hash);
 
