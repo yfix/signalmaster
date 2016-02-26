@@ -133,9 +133,12 @@ module.exports = function (server, config, mysql) {
         var result = {
             clients: {}
         };
-        Object.keys(clients).forEach(function (id) {
-            result.clients[id] = adapter.nsp.connected[id].resources;
-        });
+        
+        if (clients['sockets'] !== undefined) {
+            Object.keys(clients['sockets']).forEach(function (id) {
+                result.clients[id] = adapter.nsp.connected[id].resources;
+            });
+        }
         return result;
     }
 };
