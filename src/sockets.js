@@ -1,8 +1,9 @@
 var socketIO = require('socket.io'),
-    crypto = require('crypto');
-
+    crypto = require('crypto'),
+    redis = require('socket.io-redis');
 module.exports = function (server, config, mysql) {
     var io = socketIO.listen(server);
+    io.adapter(redis({ host: config.redis.host, port: config.redis.port }));
 
     if (config.logLevel) {
         // https://github.com/Automattic/socket.io/wiki/Configuring-Socket.IO
