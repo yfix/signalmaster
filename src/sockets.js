@@ -1,7 +1,5 @@
 var socketIO = require('socket.io'),
-    uuid = require('node-uuid'),
     crypto = require('crypto');
-    async = require('async');
 
 module.exports = function (server, config, mysql) {
     var io = socketIO.listen(server);
