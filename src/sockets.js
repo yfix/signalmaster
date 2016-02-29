@@ -177,7 +177,7 @@ module.exports = function (server, config, mysql) {
         client.emit('turnservers', credentials); */
     });
 
-
+/*
     function describeRoom(name) {
         var adapter = io.nsps['/'].adapter;
         var clients = adapter.rooms[name] || {};
@@ -188,7 +188,7 @@ module.exports = function (server, config, mysql) {
             result.clients[id] = adapter.nsp.connected[id].resources;
         });
         return result;
-    }
+    } */
 };
 
 function safeCb(cb) {
