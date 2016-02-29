@@ -1,9 +1,12 @@
 var socketIO = require('socket.io'),
     crypto = require('crypto');
-    _ = require('lodash');
+    _ = require('lodash'),
+    redis = require('socket.io-redis');
+    
     
 module.exports = function (server, config, mysql) {
     var io = socketIO.listen(server);
+    io.adapter(redis({ host: config.redis.host, port: config.redis.port }));    
     var users = [];
 
     if (config.logLevel) {

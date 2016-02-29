@@ -12,6 +12,10 @@
   "auth": {
       "secret": "234fdfjisdocw85u234895unxckvn"
   },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379
+  },  
   "mysql": {
     "host": "192.168.1.5",
     "port": 3306,
