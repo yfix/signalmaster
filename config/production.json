@@ -15,7 +15,7 @@
   "redis": {
     "host": "127.0.0.1",
     "port": 6379,
-    "prefix": "signalmaster_"
+    "prefix": "bramio_"
   },  
   "mysql": {
     "host": "127.0.0.1",
