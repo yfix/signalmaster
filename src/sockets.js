@@ -1,14 +1,14 @@
 var socketIO = require('socket.io'),
     crypto = require('crypto');
     _ = require('lodash'),
-    redis = require('socket.io-redis');
+    redis = require('redis');
     
     
 module.exports = function (server, config) {
-    var io = socketIO.listen(server);
-    io.adapter(redis({ host: config.redis.host, port: config.redis.port }));    
+    var io = socketIO.listen(server);   
     var users = [];
-
+    var redis_client = redis.createClient(config.redis.port, config.redis.host);
+    
     if (config.logLevel) {
         // https://github.com/Automattic/socket.io/wiki/Configuring-Socket.IO
         io.set('log level', config.logLevel);
@@ -30,6 +30,7 @@ module.exports = function (server, config) {
                 return; 
             }
 
+            redis_client.set(config.redis.prefix + name, socket.id);
             users.push({ 
                 name: name,
                 socket: socket.id
