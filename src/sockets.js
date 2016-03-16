@@ -6,7 +6,7 @@ var socketIO = require('socket.io'),
     
 module.exports = function (server, config) {
     var io = socketIO.listen(server);   
-    var users = [];
+    var users = [];    
     var redis_client = redis.createClient(config.redis.port, config.redis.host);
     
     if (config.logLevel) {
@@ -16,30 +16,32 @@ module.exports = function (server, config) {
 
     io.sockets.on('connection', function (socket) {
         
-        socket.on('login', function (name) {
+        socket.on('auth', function (data) {
+            
             // if this socket is already connected,
             // send a failed login message
+            redis_client.set(config.redis.prefix + "online_" + data.user_id, socket.id);
+            
             if (_.findIndex(users, { socket: socket.id }) !== -1) {
                 socket.emit('login_error', 'You are already connected.');
             }
 
             // if this name is already registered,
             // send a failed login message
-            if (_.findIndex(users, { name: name }) !== -1) {
+            if (_.findIndex(users, { name: data.user_id }) !== -1) {
                 socket.emit('login_error', 'This name already exists.');
                 return; 
             }
 
-            redis_client.set(config.redis.prefix + name, socket.id);
             users.push({ 
-                name: name,
+                name: data.user_id,
                 socket: socket.id
             });
 
             socket.emit('login_successful', _.map(users, 'name'));
-            socket.broadcast.emit('online', name);
+            socket.broadcast.emit('online', data.user_id);
 
-            console.log(name + ' logged in');
+            console.log(data.user_id + ' logged in');
         });
 
         socket.on('sendMessage', function (name, message) {
