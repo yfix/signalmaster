@@ -15,13 +15,28 @@ module.exports = function (server, config) {
     }
 
     io.sockets.on('connection', function (socket) {
+        var user_id;
         
         socket.on('auth', function (data) {
+
+            user_id = data.user_id;
+            redis_client.get(config.redis.prefix + data.room, function(err, reply) {
+                var user_data = JSON.parse(reply);
+                user_data = user_data[user_id];
+
+                if (user_data == undefined) {
+                    socket.emit('auth_error', 'You do not have access to this room');
+                } else {
+                    socket.emit('auth_success'); 
+                }
+                console.log(user_data);
+/*            
+            socket.emit('auth_error', 'Because fuck you thats why');
             
             // if this socket is already connected,
             // send a failed login message
-            redis_client.set(config.redis.prefix + "online_" + data.user_id, socket.id);
-            
+            //redis_client.set(config.redis.prefix + "online_" + data.user_id, socket.id);
+
             if (_.findIndex(users, { socket: socket.id }) !== -1) {
                 socket.emit('login_error', 'You are already connected.');
             }
@@ -42,6 +57,9 @@ module.exports = function (server, config) {
             socket.broadcast.emit('online', data.user_id);
 
             console.log(data.user_id + ' logged in');
+*/
+            });
+
         });
 
         socket.on('sendMessage', function (name, message) {
