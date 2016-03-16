@@ -27,12 +27,10 @@ module.exports = function (server, config) {
                 if (user_data == undefined) {
                     socket.emit('auth_error', 'You do not have access to this room');
                 } else {
+                    console.log(user_data);
                     socket.emit('auth_success'); 
                 }
-                console.log(user_data);
 /*            
-            socket.emit('auth_error', 'Because fuck you thats why');
-            
             // if this socket is already connected,
             // send a failed login message
             //redis_client.set(config.redis.prefix + "online_" + data.user_id, socket.id);
