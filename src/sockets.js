@@ -1,5 +1,4 @@
 var socketIO = require('socket.io'),
-    crypto = require('crypto');
     _ = require('lodash'),
     redis = require('redis');
     
@@ -36,7 +35,7 @@ module.exports = function (server, config) {
                             socket: socket.id
                         });
                         console.log(data.user_id + '(' + socket.id + ') auth ok');
-                        socket.broadcast.emit('online', data.user_id);
+                        socket.broadcast.emit('peer_ready', data.user_id);
                         socket.emit('auth_success'); 
                     }
                 }
@@ -44,15 +43,15 @@ module.exports = function (server, config) {
 
         });
 
-        socket.on('sendMessage', function (name, message) {
-            var currentUser = _.find(users, { socket: socket.id });
+        socket.on('sendMessage', function (peer_user_id, message) {
+            var currentUser = _.find(users, { user_id: user_id });
             if (!currentUser) { return; }
 
-            var contact = _.find(users, { name: name });
+            var contact = _.find(users, { user_id: peer_user_id });
             if (!contact) { return; }
 
             io.to(contact.socket)
-                .emit('messageReceived', currentUser.name, message);
+                .emit('messageReceived', currentUser.user_id, message);
         });
 
         socket.on('disconnect', function () {
