@@ -44,14 +44,18 @@ module.exports = function (server, config) {
         });
 
         socket.on('sendMessage', function (peer_user_id, message) {
+            console.log('got sendmessage (' +message+';'+ peer_user_id+')');
+            
             var currentUser = _.find(users, { user_id: user_id });
             if (!currentUser) { return; }
-
+            
             var contact = _.find(users, { user_id: peer_user_id });
             if (!contact) { return; }
 
+            console.log('sending messagereceived to '+contact.socket);
             io.to(contact.socket)
                 .emit('messageReceived', currentUser.user_id, message);
+
         });
 
         socket.on('disconnect', function () {
