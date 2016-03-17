@@ -27,35 +27,19 @@ module.exports = function (server, config) {
                 if (user_data == undefined) {
                     socket.emit('auth_error', 'You do not have access to this room');
                 } else {
-                    console.log(user_data);
-                    socket.emit('auth_success'); 
+                    // todo: use redis here too                
+                    if (_.findIndex(users, { user_id: user_id }) !== -1) {
+                        socket.emit('auth_error', 'You are already connected.');
+                    } else {
+                        users.push({ 
+                            user_id: data.user_id,
+                            socket: socket.id
+                        });
+                        console.log(data.user_id + '(' + socket.id + ') auth ok');
+                        socket.broadcast.emit('online', data.user_id);
+                        socket.emit('auth_success'); 
+                    }
                 }
-/*            
-            // if this socket is already connected,
-            // send a failed login message
-            //redis_client.set(config.redis.prefix + "online_" + data.user_id, socket.id);
-
-            if (_.findIndex(users, { socket: socket.id }) !== -1) {
-                socket.emit('login_error', 'You are already connected.');
-            }
-
-            // if this name is already registered,
-            // send a failed login message
-            if (_.findIndex(users, { name: data.user_id }) !== -1) {
-                socket.emit('login_error', 'This name already exists.');
-                return; 
-            }
-
-            users.push({ 
-                name: data.user_id,
-                socket: socket.id
-            });
-
-            socket.emit('login_successful', _.map(users, 'name'));
-            socket.broadcast.emit('online', data.user_id);
-
-            console.log(data.user_id + ' logged in');
-*/
             });
 
         });
@@ -74,8 +58,8 @@ module.exports = function (server, config) {
         socket.on('disconnect', function () {
             var index = _.findIndex(users, { socket: socket.id });
             if (index !== -1) {
-                socket.broadcast.emit('offline', users[index].name);
-                console.log(users[index].name + ' disconnected');
+                socket.broadcast.emit('offline', users[index].user_id);
+                console.log(users[index].user_id + '(' + users[index].socket + ')' + ' disconnected');
 
                 users.splice(index, 1);
             }
