@@ -24,7 +24,7 @@ module.exports = function (server, config) {
                 var user_data = JSON.parse(reply);
                 user_data = user_data[user_id];
 
-                if (user_data == undefined) {
+                if (user_data == undefined || user_data.hash != data.hash) {
                     socket.emit('auth_error', 'You do not have access to this room');
                 } else {
                     // todo: use redis here too                
