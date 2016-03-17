@@ -44,7 +44,7 @@ module.exports = function (server, config) {
         });
 
         socket.on('sendMessage', function (peer_user_id, message) {
-            console.log('got sendmessage (' +message+';'+ peer_user_id+')');
+            console.log('got sendmessage (' +message.type+';'+ peer_user_id+')');
             
             var currentUser = _.find(users, { user_id: user_id });
             if (!currentUser) { return; }
